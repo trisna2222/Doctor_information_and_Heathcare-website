@@ -547,7 +547,8 @@ img {
     background-repeat: no-repeat;
     opacity: 0;
     transition: opacity 1s ease-in-out;
-    visibility: hidden; /* Hide non-active slides from screen readers/focus */
+    visibility: hidden;
+    /* Hide non-active slides from screen readers/focus */
 }
 
 .hero-slide.active {
@@ -582,7 +583,8 @@ img {
     max-width: 900px;
     width: 100%;
     color: white;
-    margin: 0 auto; /* Center block */
+    margin: 0 auto;
+    /* Center block */
 }
 
 
@@ -590,7 +592,8 @@ img {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
-    justify-content: center; /* Center buttons */
+    justify-content: center;
+    /* Center buttons */
 }
 
 
@@ -620,8 +623,10 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Center horizontally */
-    text-align: center;   /* Center text */
+    align-items: center;
+    /* Center horizontally */
+    text-align: center;
+    /* Center text */
 }
 
 /* Navigation Buttons */
@@ -659,8 +664,15 @@ img {
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hero-slide.active .hero-text-content h5 {
@@ -669,7 +681,8 @@ img {
 
 .hero-slide.active .hero-text-content h1 {
     animation: fadeIn 0.8s ease-out 0.2s forwards;
-    opacity: 0; /* Initial state for animation */
+    opacity: 0;
+    /* Initial state for animation */
 }
 
 .hero-slide.active .hero-text-content p {
@@ -2107,4 +2120,72 @@ img {
 
 .submit-btn:hover {
     background-color: #0fbbd2;
+}
+
+/* Video Modal Styles */
+.video-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: none;
+    /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.video-modal-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.video-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.video-modal-overlay.show .video-modal-content {
+    transform: scale(1);
+}
+
+.video-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.video-modal-close:hover {
+    color: var(--bs-primary);
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
