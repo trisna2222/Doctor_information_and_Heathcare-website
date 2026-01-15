@@ -96,5 +96,69 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    /* --- Testimonial Carousel Logic --- */
+    const testimonialTrack = document.querySelector('.testimonial-track');
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const testimonialDots = document.querySelectorAll('.testi-dot');
+
+    if (testimonialTrack && testimonialCards.length > 0) {
+        let testiIndex = 0;
+        const testiIntervalTime = 5000;
+        let testiAutoSlide;
+
+        function updateTestimonialSlide() {
+            // Get the width of a single card dynamically to handle responsive resizing
+            const cardWidth = testimonialCards[0].offsetWidth;
+
+            // Move the track
+            testimonialTrack.style.transform = `translateX(-${testiIndex * cardWidth}px)`;
+
+            // Update active dot
+            testimonialDots.forEach(dot => dot.classList.remove('active'));
+            if (testimonialDots[testiIndex]) {
+                testimonialDots[testiIndex].classList.add('active');
+            }
+        }
+
+        function nextTestimonial() {
+            testiIndex++;
+            // Basic looping logic
+            if (testiIndex >= testimonialCards.length) {
+                testiIndex = 0;
+            }
+            updateTestimonialSlide();
+        }
+
+        // Event Listeners for Dots
+        testimonialDots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.dataset.index);
+                if (!isNaN(index)) {
+                    testiIndex = index;
+                    updateTestimonialSlide();
+                    resetTestiAutoSlide();
+                }
+            });
+        });
+
+        // Auto Slide
+        function startTestiAutoSlide() {
+            testiAutoSlide = setInterval(nextTestimonial, testiIntervalTime);
+        }
+
+        function resetTestiAutoSlide() {
+            clearInterval(testiAutoSlide);
+            startTestiAutoSlide();
+        }
+
+        // Handle Window Resize (re-calculate width)
+        window.addEventListener('resize', updateTestimonialSlide);
+
+        // Initialize
+        updateTestimonialSlide(); // Set initial state
+        startTestiAutoSlide();
+    }
+
 });
 
