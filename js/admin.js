@@ -1,16 +1,49 @@
-import { getDoctors, saveDoctor, deleteDoctor, getDoctorById } from './doctors.js';
+/* 
+   Assumes doctors.js and blog-manager.js have already been loaded 
+   and have attached functions to the window object.
+*/
 
-const tableBody = document.getElementById('doctors-table-body');
-const modal = document.getElementById('doctor-modal');
-const modalTitle = document.getElementById('modal-title');
-const form = document.getElementById('doctor-form');
-const addBtn = document.getElementById('add-doctor-btn');
-const closeBtn = document.getElementById('close-modal');
+/* ===========================
+   Tabs Logic
+   =========================== */
+const tabs = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
 
-// Initial Load
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        // Remove active class from all
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => {
+            c.style.display = 'none';
+            c.classList.remove('active');
+        });
+
+        // Add active class to clicked
+        tab.classList.add('active');
+        const target = document.getElementById(`${tab.dataset.tab}-tab`);
+        if (target) {
+            target.style.display = 'block';
+            setTimeout(() => target.classList.add('active'), 10);
+        }
+    });
+});
+
+/* ===========================
+   DOCTORS Logic
+   =========================== */
+const docTableBody = document.getElementById('doctors-table-body');
+const docModal = document.getElementById('doctor-modal');
+const docModalTitle = document.getElementById('modal-title');
+const docForm = document.getElementById('doctor-form');
+const addDocBtn = document.getElementById('add-doctor-btn');
+const closeDocBtn = document.getElementById('close-modal');
+
+// Initial Load Doctors
 function renderDoctors() {
-    const doctors = getDoctors();
-    tableBody.innerHTML = '';
+    if (!window.getDoctors) return; // Guard clause
+
+    const doctors = window.getDoctors();
+    docTableBody.innerHTML = '';
 
     doctors.forEach(doc => {
         const tr = document.createElement('tr');
@@ -20,39 +53,35 @@ function renderDoctors() {
             <td>${doc.department}</td>
             <td>${doc.role}</td>
             <td>
-                <button class="btn btn-primary btn-sm edit-btn" data-id="${doc.id}"><i class="fas fa-edit"></i> Edit</button>
-                <button class="btn btn-danger btn-sm delete-btn" data-id="${doc.id}"><i class="fas fa-trash"></i> Delete</button>
+                <button class="btn btn-primary btn-sm edit-doc-btn" data-id="${doc.id}"><i class="fas fa-edit"></i> Edit</button>
+                <button class="btn btn-danger btn-sm delete-doc-btn" data-id="${doc.id}"><i class="fas fa-trash"></i> Delete</button>
             </td>
         `;
-        tableBody.appendChild(tr);
+        docTableBody.appendChild(tr);
     });
 
-    // Attach Event Listeners to dynamic buttons
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => openEditModal(e.target.closest('button').dataset.id));
+    // Attach Event Listeners
+    document.querySelectorAll('.edit-doc-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => openEditDocModal(e.target.closest('button').dataset.id));
     });
 
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => handleDelete(e.target.closest('button').dataset.id));
+    document.querySelectorAll('.delete-doc-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => handleDocDelete(e.target.closest('button').dataset.id));
     });
 }
 
-// Open Modal
-function openModal() {
-    modal.classList.add('active');
-}
-
-function closeModal() {
-    modal.classList.remove('active');
-    form.reset();
+function openDocModal() { docModal.classList.add('active'); }
+function closeDocModal() {
+    docModal.classList.remove('active');
+    docForm.reset();
     document.getElementById('doctor-id').value = '';
 }
 
-function openEditModal(id) {
-    const doc = getDoctorById(id);
+function openEditDocModal(id) {
+    const doc = window.getDoctorById(id);
     if (!doc) return;
 
-    modalTitle.innerText = 'Edit Doctor';
+    docModalTitle.innerText = 'Edit Doctor';
     document.getElementById('doctor-id').value = doc.id;
     document.getElementById('name').value = doc.name || '';
     document.getElementById('department').value = doc.department || 'Cardiology';
@@ -63,52 +92,157 @@ function openEditModal(id) {
     document.getElementById('bio').value = doc.bio || '';
     document.getElementById('schedule').value = doc.schedule || '';
 
-    openModal();
+    openDocModal();
 }
 
-function handleDelete(id) {
+function handleDocDelete(id) {
     if (confirm('Are you sure you want to delete this doctor?')) {
-        deleteDoctor(id);
+        window.deleteDoctor(id);
         renderDoctors();
     }
 }
 
-// Form Submit
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
+if (docForm) {
+    docForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('doctor-id').value;
+        const newDoc = {
+            id: id || 'doc-' + Date.now(),
+            name: document.getElementById('name').value,
+            department: document.getElementById('department').value,
+            role: document.getElementById('role').value,
+            qualification: document.getElementById('qualification').value,
+            fee: document.getElementById('fee').value,
+            image: document.getElementById('image').value,
+            bio: document.getElementById('bio').value,
+            schedule: document.getElementById('schedule').value
+        };
+        window.saveDoctor(newDoc);
+        closeDocModal();
+        renderDoctors();
+    });
+}
 
-    const id = document.getElementById('doctor-id').value;
-    const newDoc = {
-        id: id || 'doc-' + Date.now(),
-        name: document.getElementById('name').value,
-        department: document.getElementById('department').value,
-        role: document.getElementById('role').value,
-        qualification: document.getElementById('qualification').value,
-        fee: document.getElementById('fee').value,
-        image: document.getElementById('image').value,
-        bio: document.getElementById('bio').value,
-        schedule: document.getElementById('schedule').value
-    };
+if (addDocBtn) {
+    addDocBtn.addEventListener('click', () => {
+        docModalTitle.innerText = 'Add New Doctor';
+        openDocModal();
+    });
+}
 
-    saveDoctor(newDoc);
-    closeModal();
-    renderDoctors();
-});
+if (closeDocBtn) {
+    closeDocBtn.addEventListener('click', closeDocModal);
+}
 
-// Event Listeners
-addBtn.addEventListener('click', () => {
-    modalTitle.innerText = 'Add New Doctor';
-    openModal();
-});
 
-closeBtn.addEventListener('click', closeModal);
+/* ===========================
+   BLOG Logic
+   =========================== */
+const blogTableBody = document.getElementById('blogs-table-body');
+const blogModal = document.getElementById('blog-modal');
+const blogModalTitle = document.getElementById('blog-modal-title');
+const blogForm = document.getElementById('blog-form');
+const addBlogBtn = document.getElementById('add-blog-btn');
+const closeBlogBtn = document.getElementById('close-blog-modal');
 
-// Click outside to close
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
+function renderBlogs() {
+    if (!window.getBlogs) return;
+
+    const blogs = window.getBlogs();
+    if (blogTableBody) {
+        blogTableBody.innerHTML = '';
+        blogs.forEach(blog => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><img src="${blog.image}" alt="${blog.title}" onerror="this.src='img/blog1.png'"></td>
+                <td><strong>${blog.title}</strong></td>
+                <td>${blog.date}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm edit-blog-btn" data-id="${blog.id}"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn btn-danger btn-sm delete-blog-btn" data-id="${blog.id}"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+            `;
+            blogTableBody.appendChild(tr);
+        });
+
+        document.querySelectorAll('.edit-blog-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => openEditBlogModal(e.target.closest('button').dataset.id));
+        });
+
+        document.querySelectorAll('.delete-blog-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => handleBlogDelete(e.target.closest('button').dataset.id));
+        });
     }
+}
+
+function openBlogModal() { blogModal.classList.add('active'); }
+function closeBlogModal() {
+    blogModal.classList.remove('active');
+    blogForm.reset();
+    document.getElementById('blog-id').value = '';
+}
+
+function openEditBlogModal(id) {
+    const blog = window.getBlogById(id);
+    if (!blog) return;
+
+    blogModalTitle.innerText = 'Edit Post';
+    document.getElementById('blog-id').value = blog.id;
+    document.getElementById('blog-title').value = blog.title || '';
+    document.getElementById('blog-image').value = blog.image || '';
+    document.getElementById('blog-excerpt').value = blog.excerpt || '';
+    document.getElementById('blog-content').value = blog.content || '';
+
+    openBlogModal();
+}
+
+function handleBlogDelete(id) {
+    if (confirm('Are you sure you want to delete this post?')) {
+        window.deleteBlog(id);
+        renderBlogs();
+    }
+}
+
+if (blogForm) {
+    blogForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('blog-id').value;
+
+        const savedBlog = window.getBlogById(id) || {};
+
+        const newBlog = {
+            id: id || 'blog-' + Date.now(),
+            title: document.getElementById('blog-title').value,
+            image: document.getElementById('blog-image').value,
+            excerpt: document.getElementById('blog-excerpt').value,
+            content: document.getElementById('blog-content').value,
+            date: savedBlog.date,
+            comments: savedBlog.comments
+        };
+
+        window.saveBlog(newBlog);
+        closeBlogModal();
+        renderBlogs();
+    });
+}
+
+if (addBlogBtn) {
+    addBlogBtn.addEventListener('click', () => {
+        blogModalTitle.innerText = 'Add New Post';
+        openBlogModal();
+    });
+}
+
+if (closeBlogBtn) {
+    closeBlogBtn.addEventListener('click', closeBlogModal);
+}
+
+// Close modals on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === docModal) closeDocModal();
+    if (e.target === blogModal) closeBlogModal();
 });
 
-// Initialize
+// Init
 renderDoctors();
+renderBlogs();

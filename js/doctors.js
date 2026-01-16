@@ -1,24 +1,28 @@
-import { initialDoctors } from './doctor-data.js';
+/* Relies on window.initialDoctors from doctor-data.js */
 
-const STORAGE_KEY = 'medicoz_doctors';
+const DOC_STORAGE_KEY = 'medicoz_doctors';
 
 // Initialize data if not present
-if (!localStorage.getItem(STORAGE_KEY)) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialDoctors));
+if (!localStorage.getItem(DOC_STORAGE_KEY)) {
+    // Assuming initialDoctors might be defined in doctor-data.js attached to window
+    // Ensure doctor-data.js is loaded BEFORE this file
+    if (window.initialDoctors) {
+        localStorage.setItem(DOC_STORAGE_KEY, JSON.stringify(window.initialDoctors));
+    }
 }
 
-export const getDoctors = () => {
-    const doctors = localStorage.getItem(STORAGE_KEY);
-    return doctors ? JSON.parse(doctors) : [];
+window.getDoctors = () => {
+    const doctors = localStorage.getItem(DOC_STORAGE_KEY);
+    return doctors ? JSON.parse(doctors) : (window.initialDoctors || []);
 };
 
-export const getDoctorById = (id) => {
-    const doctors = getDoctors();
+window.getDoctorById = (id) => {
+    const doctors = window.getDoctors();
     return doctors.find(doc => doc.id === id);
 };
 
-export const saveDoctor = (doctor) => {
-    const doctors = getDoctors();
+window.saveDoctor = (doctor) => {
+    const doctors = window.getDoctors();
     const existingIndex = doctors.findIndex(d => d.id === doctor.id);
 
     if (existingIndex >= 0) {
@@ -27,17 +31,17 @@ export const saveDoctor = (doctor) => {
         doctors.push(doctor);
     }
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(doctors));
+    localStorage.setItem(DOC_STORAGE_KEY, JSON.stringify(doctors));
 };
 
-export const deleteDoctor = (id) => {
-    let doctors = getDoctors();
+window.deleteDoctor = (id) => {
+    let doctors = window.getDoctors();
     doctors = doctors.filter(doc => doc.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(doctors));
+    localStorage.setItem(DOC_STORAGE_KEY, JSON.stringify(doctors));
 };
 
-export const getAllDepartments = () => {
-    const doctors = getDoctors();
+window.getAllDepartments = () => {
+    const doctors = window.getDoctors();
     const departments = [...new Set(doctors.map(d => d.department))];
     return departments;
 };

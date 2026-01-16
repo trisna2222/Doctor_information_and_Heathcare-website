@@ -33,29 +33,61 @@
 
     <!-- Main Content -->
     <main class="admin-container">
-        <div class="admin-action-bar">
-            <h2>Doctors Management</h2>
-            <button id="add-doctor-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Doctor</button>
+        <!-- Tab Navigation -->
+        <div class="admin-tabs" style="margin-bottom: 2rem;">
+            <button class="tab-btn active" data-tab="doctors">Doctors Management</button>
+            <button class="tab-btn" data-tab="blogs">Blog Management</button>
         </div>
 
-        <!-- Doctors Table -->
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="doctors-table-body">
-                <!-- Javascript will populate this -->
-            </tbody>
-        </table>
+        <!-- Doctors Tab -->
+        <div id="doctors-tab" class="tab-content active">
+            <div class="admin-action-bar">
+                <h2>Doctors Management</h2>
+                <button id="add-doctor-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Doctor</button>
+            </div>
+
+            <!-- Doctors Table -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="doctors-table-body">
+                    <!-- Javascript will populate this -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Blogs Tab -->
+        <div id="blogs-tab" class="tab-content" style="display: none;">
+            <div class="admin-action-bar">
+                <h2>Blog Management</h2>
+                <button id="add-blog-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Post</button>
+            </div>
+
+            <!-- Blogs Table -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="blogs-table-body">
+                    <!-- Javascript will populate this -->
+                </tbody>
+            </table>
+        </div>
     </main>
 
-    <!-- Add/Edit Modal -->
+    <!-- Add/Edit Modal (Doctors) -->
     <div class="modal-overlay" id="doctor-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -122,8 +154,51 @@
         </div>
     </div>
 
+    <!-- Add/Edit Modal (Blogs) -->
+    <div class="modal-overlay" id="blog-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="blog-modal-title">Add New Post</h3>
+                <button class="close-modal" id="close-blog-modal">&times;</button>
+            </div>
+            <form id="blog-form">
+                <input type="hidden" id="blog-id">
+
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="blog-title" class="form-control" required placeholder="Enter blog title">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Image Path</label>
+                    <input type="text" id="blog-image" class="form-control" placeholder="e.g. img/blog1.png" required>
+                    <small style="color: #777;">Enter relative path to image.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Except (Short Summary)</label>
+                    <textarea id="blog-excerpt" class="form-control" rows="3" required
+                        placeholder="Short summary for the card view..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Content (HTML allowed)</label>
+                    <textarea id="blog-content" class="form-control" rows="10" required
+                        placeholder="Full content of the blog post..."></textarea>
+                    <small style="color: #777;">You can use HTML tags like &lt;p&gt;, &lt;h3&gt;, etc.</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Save Post</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Logic -->
-    <script type="module" src="js/admin.js"></script>
+    <script src="js/doctor-data.js"></script>
+    <script src="js/doctors.js"></script>
+    <script src="js/blog-data.js"></script>
+    <script src="js/blog-manager.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 
 </html>
