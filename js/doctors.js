@@ -2,13 +2,9 @@
 
 const DOC_STORAGE_KEY = 'medicoz_doctors';
 
-// Initialize data if not present
-if (!localStorage.getItem(DOC_STORAGE_KEY)) {
-    // Assuming initialDoctors might be defined in doctor-data.js attached to window
-    // Ensure doctor-data.js is loaded BEFORE this file
-    if (window.initialDoctors) {
-        localStorage.setItem(DOC_STORAGE_KEY, JSON.stringify(window.initialDoctors));
-    }
+// Always update from source of truth (file system scan)
+if (window.initialDoctors) {
+    localStorage.setItem(DOC_STORAGE_KEY, JSON.stringify(window.initialDoctors));
 }
 
 window.getDoctors = () => {

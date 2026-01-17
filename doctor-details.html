@@ -15,6 +15,10 @@
 
 <body>
 
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/doctor-data.js"></script>
+
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="top-bar-inner">
@@ -173,37 +177,28 @@
                     </div>
                     
                     <div>
-                        <img src="${doctor.image}" alt="${doctor.name}" class="doctor-image" onerror="this.src='img/default-doctor.jpg'">
-                    </div>
-                </div>
-                
-                <div class="doctor-bio">
-                    ${doctor.bio}
-                </div>
-                
-                <div class="schedule-section">
-                    <div class="schedule-header">
-                        <h2>Schedule</h2>
-                        <div class="schedule-options">
-                            <label class="schedule-option">
-                                <input type="radio" name="schedule" class="radio-custom" checked>
-                                <span>In Hub</span>
-                            </label>
-                            <label class="schedule-option">
-                                <input type="radio" name="schedule" class="radio-custom">
-                                <span>Online</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="appointment-section" style="margin-top: 1rem;">
-                        <p><strong>Visiting Hours:</strong> ${doctor.schedule || 'Call for appointment'}</p>
-                        <button class="book-btn" style="margin-top: 1rem;">
-                            <a href="appointment.html?doctor=${doctor.id}" class="text-light">Book Appointment <span>?</span></a>
-                        </button>
-                    </div>
-                </div>
-            `;
+        <div class="schedule-header">
+            <h2>Schedule</h2>
+            <div class="schedule-options">
+                <label class="schedule-option">
+                    <input type="radio" name="schedule" class="radio-custom" checked>
+                    <span>In Hub</span>
+                </label>
+                <label class="schedule-option">
+                    <input type="radio" name="schedule" class="radio-custom">
+                    <span>Online</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="appointment-section" style="margin-top: 1rem;">
+            <p><strong>Visiting Hours:</strong> ${doctor.schedule || 'Call for appointment'}</p>
+            <button class="book-btn" style="margin-top: 1rem;">
+                <a href="appointment.html?doctor=${doctor.id}" class="text-light">Book Appointment <span>?</span></a>
+            </button>
+        </div>
+    </div>
+    `;
         } else {
             container.innerHTML = `<h3>Doctor not found.</h3><a href="team.html">Back to Team</a>`;
         }

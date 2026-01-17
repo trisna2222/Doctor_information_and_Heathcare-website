@@ -1,4 +1,5 @@
-import { getDoctors, getAllDepartments } from './doctors.js';
+// Imports removed to use global window objects
+// import { getDoctors, getAllDepartments } from './doctors.js';
 
 const container = document.getElementById('team-container');
 const doctors = getDoctors();
@@ -30,7 +31,7 @@ function createDoctorCard(doc) {
             <div class="team-content" style="padding: 1.5rem; text-align: center;">
                 <h5 class="team-name" style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">${doc.name}</h5>
                 <p class="team-role" style="color: var(--bs-primary); margin-bottom: 1rem;">${doc.role}</p>
-                <a href="doctor-details.html?id=${doc.id}" class="service-btn">See Details</a>
+                <a href="${doc.filename}" class="service-btn">See Details</a>
             </div>
         </div>
     `;

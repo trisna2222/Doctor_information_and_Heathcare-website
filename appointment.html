@@ -81,69 +81,82 @@
         </div>
     </div>
 
-    <!-- Semantic Appointment Section -->
-    <div class="appointment-section section-wrapper pt-5 pb-5">
+   
+    <!-- Book Appointment Start -->
+    <!-- Video Appointment Section -->
+    <div class="video-appointment-section">
         <div class="content-container">
-            <div class="appointment-grid">
-                <!-- Info Column -->
-                <div class="appointment-info">
-                    <div class="section-subtitle">Solutions To Your Pain</div>
-                    <h1 class="section-title">Best Quality Services With Minimal Pain Rate</h1>
-                    <p class="mb-4">We provide specialized treatments to ensure quick recovery and long-term health. Our
-                        expert team is dedicated to your well-being.</p>
+            <div class="video-app-grid">
 
-                    <div class="check-list"
-                        style="grid-template-columns: 1fr 1fr; display: grid; gap: 1rem; margin-bottom: 2rem;">
-                        <div class="check-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Body Relaxation</span>
+                <!-- Left Column: Content & Video -->
+                <div class="video-app-content-left">
+                    <span class="video-subtitle">Solutions to your health needs</span>
+                    <h2 class="video-title">Trusted Doctors & Quality Healthcare Services</h2>
+                    <p class="video-desc">We connect patients with qualified and experienced doctors across multiple
+                        specialties. Our platform ensures reliable medical information, easy appointment booking, and
+                        access to quality healthcare services when you need them most.</p>
+
+                    <div class="video-features-box">
+                        <div class="video-feature-list">
+                            <h5><i class="fas fa-check"></i> Qualified & Verified Doctors</h5>
+                            <p>Find certified and experienced doctors with detailed profiles, qualifications, and years
+                                of expertise to help you choose the right healthcare professional.</p>
+
+                            <h5><i class="fas fa-check"></i> Multiple Medical Specialties</h5>
+                            <p>Access doctors from various departments including Medicine, Cardiology, Pediatrics,
+                                Gynecology, Orthopedics, and more—all in one place.</p>
+
+                            <a href="#" class="service-btn" style="margin-top: 1rem;">More Details</a>
                         </div>
-                        <div class="check-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Pain Management</span>
-                        </div>
-                        <div class="check-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Expert Therapists</span>
-                        </div>
-                        <div class="check-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Modern Equipment</span>
+
+                        <div class="video-thumbnail-box">
+                            <img src="img/carousel-1.jpg" alt="Video Thumbnail">
+                            <button class="video-play-btn"><i class="fas fa-play"></i></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Form Column -->
-                <div class="appointment-form-box">
-                    <h2 style="color: white; margin-bottom: 2rem; text-align: center;">Get Appointment</h2>
-                    <form class="form-grid">
-                        <input type="text" class="form-input" placeholder="First Name">
-                        <input type="email" class="form-input" placeholder="Email">
+                <!-- Right Column: Appointment Form -->
+                <div class="appointment-form-container">
+                    <span class="app-form-subtitle">Get In Touch</span>
+                    <h3 class="app-form-title">Get Appointment</h3>
 
-                        <input type="tel" class="form-input" placeholder="Phone">
-                        <select class="form-input">
-                            <option selected>Your Gender</option>
-                            <option value="1">Male</option>
-                            <option value="2">Female</option>
-                            <option value="3">Others</option>
-                        </select>
+                    <form action="#">
+                        <div class="app-form-grid">
+                            <input type="text" class="app-input" placeholder="First Name">
+                            <input type="email" class="app-input" placeholder="Email">
 
-                        <input type="date" class="form-input">
-                        <select class="form-input">
-                            <option selected>Department</option>
-                            <option value="1">Physiotherapy</option>
-                            <option value="2">Physical Health</option>
-                            <option value="3">Treatments</option>
-                        </select>
+                            <input type="tel" class="app-input" placeholder="Phone">
+                            <select class="app-select">
+                                <option value="">Your Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
 
-                        <textarea class="form-textarea full-width" rows="4" placeholder="Write Comments"></textarea>
+                            <input type="text" class="app-input" placeholder="mm/dd/yyyy">
+                            <select class="app-select">
+                                <option value="">Department</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                            </select>
 
-                        <button type="submit" class="form-btn full-width">Submit Now</button>
+                            <div class="full-width">
+                                <input type="text" class="app-input" placeholder="Write Comments">
+                            </div>
+
+                            <div class="full-width">
+                                <button type="button" class="submit-btn">Submit Now</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
+    <!-- Book Appointment End -->
 
     <!-- Semantic Footer -->
     <footer class="site-footer">
@@ -190,6 +203,45 @@
             </div>
         </div>
     </footer>
+
+
+     <!-- JavaScript Libraries -->
+    <!-- Auth Script -->
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+    <!-- Dynamic Blog Scripts -->
+    <script src="js/blog-data.js"></script>
+    <script src="js/blog-manager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('home-blog-grid');
+            if (container && window.getBlogs) {
+                const blogs = window.getBlogs().slice(0, 3); // Get latest 3
+
+                if (blogs.length === 0) {
+                    container.innerHTML = '<p>No blog posts available.</p>';
+                } else {
+                    container.innerHTML = blogs.map(blog => `
+                        <div class="blog-card">
+                            <div class="blog-img-box">
+                                <img src="${blog.image}" alt="${blog.title}" onerror="this.src='img/blog1.png'">
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <span><i class="fa fa-calendar-alt"></i> ${blog.date}</span>
+                                    <span><i class="fa fa-comments"></i> ${blog.comments} Comments</span>
+                                </div>
+                                <a href="blog-details.html?id=${blog.id}" class="blog-title">${blog.title}</a>
+                                <p class="blog-excerpt">${blog.excerpt}</p>
+                                <a href="blog-details.html?id=${blog.id}" class="blog-btn">Read More</a>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        });
+    </script>
+
 
 </body>
 
